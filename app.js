@@ -1,9 +1,11 @@
 const express = require("express");
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 const tasks = require("./routes/tasks");
 const connectDB = require("./db/connect");
 require("dotenv").config();
+const notFound = require("./middlewares/not_found");
+const errorHandlerMiddleware = require("./middlewares/error-handler");
 
 //middleware
 app.use(express.static("./public"));
@@ -15,6 +17,9 @@ app.get("/hello", (req, res) => {
 });
 
 app.use("/api/v1/tasks", tasks);
+
+app.use(notFound);
+app.use(errorHandlerMiddleware);
 
 // app.get("/api/v1/tasks");
 // app.post("/api/v1/tasks");
